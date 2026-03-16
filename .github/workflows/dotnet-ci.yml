@@ -14,10 +14,24 @@ jobs:
   build-and-test:
     runs-on: windows-latest   
     steps:
+      - name: Clean bin and obj folders
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path . -Include bin,obj -Recurse -Directory | ForEach-Object {
+            Write-Host "Removing $($_.FullName)"
+            Remove-Item -Path $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+          }
       # Шаг 1: Получить код из репозитория
       - name: Checkout Repo
         uses: actions/checkout@v4 # Это checkout -- это actions самого GitHub
                                   # все actions хранятся в одноименной директории
+      - name: Clean bin and obj folders
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path . -Include bin,obj -Recurse -Directory | ForEach-Object {
+            Write-Host "Removing $($_.FullName)"
+            Remove-Item -Path $_.FullName -Recurse -Force -ErrorAction SilentlyContinue
+          }
       # Шаг 2: Установить .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
